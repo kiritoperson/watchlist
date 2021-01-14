@@ -19,6 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #关闭对模型的修改
 
 db = SQLAlchemy(app)
 
+
 class  User(db.Model):
     id = db.Column(db.Integer, primary_key = True) #主键
     name = db.Column(db.String(20)) #名字
@@ -28,21 +29,32 @@ class Movie(db.Model): #表名将会是movie
     title = db.Column(db.String(60))    #电影标题
     year = db.Column(db.String(4))  #电影年份
 
-
-@app.route('/test')
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user) #需要返回字典，等同于return{"User：user"}
+    
+@app.route('/')
 def index():
-    user = User.query.first() #读取用户记录
     movies = Movie.query.all()  #读取所有电影记录
-    return render_template('index.html', user=user, movies=movies)
+    return render_template('index.html',  movies=movies)
 
-def test_url_for():
-    # 下面是一些调用示例
-    print(url_for('hello'))
 
-    print(url_for('test_url_for')) #输出/test
-    #下面这个调用传人多余的关键字参数
-    print(url_for('test_url_for', num=2))
-    return 'test page'
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404 #返回模块和状态码
+
+
+@app.cli.command() # 注册为命令
+@click.option('--drop', is_flag=True, help='Create after drop.')
+    # 设置选项
+def initdb(drop):
+    """Initialize the database."""
+    if drop: # 判断是否输入了选项
+        db.drop_all()
+    db.create_all()
+    click.echo('Initialized database.') 
+
 
 @app.cli.command()
 def forge():
@@ -64,12 +76,3 @@ movies = [
 {'title': 'The Pork of Music', 'year': '2012'},
 ]
 
-user = User(name=name)
-db.session.add(user)
-for m in movies:
-    movie = Movie(title=m['title'], year=m['year'])
-    db.session.add(movie)
-
-db.session.commit()
-click.echo('Done.')
-    

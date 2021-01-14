@@ -3,34 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <head>
+    <title>{{ user.name}}Watchlist</title>
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico' )}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}" type="text/css">
-    </head>
-    <title>{{ user.name }}'s Watchlist</title>
 </head>
 <body>
-  
-  {% extends 'base.html' %}
+    {% extends 'base.html' %}
 
-  {% block content %}
+    {% block content %}
+
     {# 使用length 过滤器获取 movies 变量的长度 #}
     <p>{{ movies|length }} Title</p>
     <ul class="movies-list">
-        {% for movies in movies %}  {# 迭代movies变量 #}
-        <li>{{movies.title}} - {{ movies.year }}
-          <span class="float-right">
-            <a class="imdb" href="#" target="_blank" title="Find this movie on IMDb">IMDb</a>
-            </span>
-            
-        </li>{# 等同于movies ['title'] #}
-        {% endfor %}    {# 使用 endfor 标签结束for语句 #}
+       <li>
+           Page Not Found - 404
+           <span class="float-right">
+               <a href="{{ url_for('index')}}">Go Back</a>
+           </span>
+       </li>
         
     </ul>
     <img class="Walking Totoro" src="{{ url_for('static', filename='images/totoro.gif' )}}" alt="Waking Totoro">
-      {% endblock %}
-
-      
-
+    {% endblock %}
 </body>
 </html>
