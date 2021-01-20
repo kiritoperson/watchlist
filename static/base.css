@@ -21,3 +21,13 @@ nav li a{
 nav li a:hover{
     background-color: #111;
 }
+/* alert */
+.alert{
+    position: relative;
+    padding: 7px;
+    margin: 7px 0;
+    border: 1px solid transparent;
+    color: #004085;
+    background-color: #badaff;
+    border-radius: 5px;
+}
